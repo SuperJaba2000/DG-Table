@@ -7,74 +7,73 @@
                 margin: 0;
             }
             
-            button{
+            .musicbutton{
                 font-size: 2rem;
                 padding: 0.5rem;
-                margin: 0.5rem;
+                margin: 0.4rem;
+                width: calc(100% - 0.8rem);
             }
         </style>
         <meta charset="utf8">
     </head>
     <body>
         <script>
-            const musicRaw = [
-                {
-                    name: 'СТОП',
-                    path: '',
-                },
-                {
-                    name: 'Таинственная',
-                    path: './scared.mp3'
-                },
-                {
-                    name: 'Лунная походка',
-                    path: './jackson.mp3'
-                },
-                {
-                    name: 'Секретные материалы',
-                    path: './tainted.mp3'
-                },
-                {
-                    name: 'Модный приговор',
-                    path: './moda.mp3'
-                },
-                /*{
-                    name: 
-                }*/
+            let musicPath = './music/';
+        
+            class Music{ 
+                constructor(name, path, color = 'white'){
+                    this.name = name;
+                    this.path = musicPath + path;
+                    this.color = color;
+                    
+                    this.audio = new Audio(this.path);
+                }
+            }
+        
+            const musicList = [
+                new Music('СТОП', '', 'red'),
+                
+                new Music('Таинственная', '1.mp3'),
+                new Music('Лунная походка', '2.mp3'),
+                new Music('Секретные материалы', '3.mp3'),
+                new Music('Модный приговор', '4.mp3'),
+                new Music('Трава у дома', '5.mp3'),
+                new Music('Функу буги', '6.mp3'),
+                new Music('Тодес', '7.mp3'),
+                
+                new Music('СТОП', '', 'red')
             ];
             
-            const musics = [];
-            
-            function createMusic(){
-                for(let raw of musicRaw){
-                    musics.push({
-                        name: raw.name,
-                        audio: new Audio(raw.path)
-                    });
-                }
+            function pauseAll(){
+                for(let music of musicList)
+                    music.audio.pause();
             };
             
-            function stopAll(){
-                for(let music of musics){
-                    music.audio.pause()
-                }
+            function createButton(name, audio, color, textColor){
+                let button = document.createElement('button');
+                button.innerHTML = name;
+                button.classList.add('musicbutton');
+                button.style['background-color'] = color;
+                button.style['color'] = textColor;
+                
+                button.onclick = () => {
+                    pauseAll();
+                    audio.play();
+                };
+                
+                document.body.appendChild(button);
             };
             
             function createButtons(){
-                for(let music of musics){
-                    let musicButton = document.createElement('button');
-                    musicButton.innerHTML = music.name;
-                    musicButton.onclick = () => {
-                        stopAll();
-                        music.audio.play();
-                        
-                    };
-                    document.body.appendChild(musicButton);
+                for(let music of musicList){
+                    let color = 'grey';
+                    let textColor = music.color;
+                    
+                    createButton(music.name, music.audio, color, textColor);
                 }
             };
             
-            createMusic()
-            createButtons()
+            createButtons();
         </script>
     </body>
 </html>
